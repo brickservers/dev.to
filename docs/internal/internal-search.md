@@ -16,9 +16,9 @@ The view responsible for managing user reports can be found at
 action of the [`internal/feedback_messages_controller`][feedback_messages].
 
 For DEV, Ransack is being used exclusively in internal, for search problems in
-other parts of the app we use [Elasticsearch][elasticsearch].
+other parts of the app we use [Algolia][algolia].
 
 [feedback_messages]:
   https://github.com/thepracticaldev/dev.to/blob/4e41e4a2ac893fa2a6c36990cfe475858ffb086a/app/controllers/internal/feedback_messages_controller.rb#L4
 [ransack]: https://github.com/activerecord-hackery/ransack
-[elasticsearch]: /backend/elasticsearch
+[algolia]: /backend/algolia

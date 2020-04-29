@@ -19,6 +19,7 @@ globals: {
   InstantClick: false,
   filterXSS: false,
   Pusher: false,
+  algoliasearch: false,
 }
 ```
 
