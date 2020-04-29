@@ -7,12 +7,12 @@ describe DataUpdateScripts::IndexReadingListReactions, elasticsearch: true do
     Sidekiq::Worker.clear_all
 
     reactions.each do |reaction|
-      expect { reaction.elasticsearch_doc }.to raise_error(Search::Errors::Transport::NotFound)
+      expect { reaction.search_doc }.to raise_error(Search::Errors::Transport::NotFound)
     end
 
     sidekiq_perform_enqueued_jobs { described_class.new.run }
     reactions.each do |reaction|
-      expect(reaction.elasticsearch_doc).not_to be_nil
+      expect(reaction.search_doc).not_to be_nil
     end
   end
 end

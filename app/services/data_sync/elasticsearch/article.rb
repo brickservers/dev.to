@@ -19,9 +19,9 @@ module DataSync
       def sync_related_documents
         RELATED_DOCS.each do |relation_name|
           if updated_record.published
-            send(relation_name).find_each(&:index_to_elasticsearch)
+            send(relation_name).find_each(&:index)
           elsif updated_fields.key?(:published)
-            send(relation_name).find_each(&:remove_from_elasticsearch)
+            send(relation_name).find_each(&:remove_from_index)
           end
         end
       end

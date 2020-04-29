@@ -16,8 +16,8 @@ class ClassifiedListing < ApplicationRecord
   before_save :evaluate_markdown
   before_create :create_slug
   before_validation :modify_inputs
-  after_commit :index_to_elasticsearch, on: %i[create update]
-  after_commit :remove_from_elasticsearch, on: [:destroy]
+  after_commit :index, on: %i[create update]
+  after_commit :remove_from_index, on: [:destroy]
   acts_as_taggable_on :tags
   has_many :credits, as: :purchase, inverse_of: :purchase, dependent: :nullify
 

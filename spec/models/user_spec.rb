@@ -210,9 +210,9 @@ RSpec.describe User, type: :model do
     end
 
     it "on update syncs elasticsearch data" do
-      allow(user).to receive(:sync_related_elasticsearch_docs)
+      allow(user).to receive(:sync_related_search_docs)
       user.save
-      expect(user).to have_received(:sync_related_elasticsearch_docs)
+      expect(user).to have_received(:sync_related_search_docs)
     end
 
     it "on destroy enqueues job to delete user from elasticsearch" do

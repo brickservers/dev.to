@@ -96,8 +96,8 @@ RSpec.describe Reaction, type: :model do
     context "when category is not readinglist" do
       before do
         reaction.category = "like"
-        allow(reaction.user).to receive(:index_to_elasticsearch)
-        allow(reaction.reactable).to receive(:index_to_elasticsearch)
+        allow(reaction.user).to receive(:index)
+        allow(reaction.reactable).to receive(:index)
         sidekiq_perform_enqueued_jobs
       end
 

@@ -80,9 +80,9 @@ class Article < ApplicationRecord
 
   after_update_commit :update_notifications, if: proc { |article| article.notifications.any? && !article.saved_changes.empty? }
   after_commit :async_score_calc, :update_main_image_background_hex, :touch_collection, on: %i[create update]
-  after_commit :index_to_elasticsearch, on: %i[create update]
-  after_commit :sync_related_elasticsearch_docs, on: %i[create update]
-  after_commit :remove_from_elasticsearch, on: [:destroy]
+  after_commit :index, on: %i[create update]
+  after_commit :sync_related_search_docs, on: %i[create update]
+  after_commit :remove_from_index, on: [:destroy]
 
   before_destroy :before_destroy_actions, prepend: true
 
@@ -230,7 +230,7 @@ class Article < ApplicationRecord
 
   def touch_by_reaction
     async_score_calc
-    index_to_elasticsearch
+    index
   end
 
   def comments_blob

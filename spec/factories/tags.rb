@@ -6,7 +6,7 @@ FactoryBot.define do
     supported { true }
 
     trait :search_indexed do
-      after(:create, &:index_to_elasticsearch_inline)
+      after(:create, &:index_inline)
     end
   end
 end

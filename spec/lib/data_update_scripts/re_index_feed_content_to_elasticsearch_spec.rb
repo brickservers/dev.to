@@ -6,13 +6,13 @@ describe DataUpdateScripts::ReIndexFeedContentToElasticsearch, elasticsearch: tr
     article = create(:article)
     podcast_episode = create(:podcast_episode)
     comment = create(:comment)
-    expect { article.elasticsearch_doc }.to raise_error(Search::Errors::Transport::NotFound)
-    expect { podcast_episode.elasticsearch_doc }.to raise_error(Search::Errors::Transport::NotFound)
-    expect { comment.elasticsearch_doc }.to raise_error(Search::Errors::Transport::NotFound)
+    expect { article.search_doc }.to raise_error(Search::Errors::Transport::NotFound)
+    expect { podcast_episode.search_doc }.to raise_error(Search::Errors::Transport::NotFound)
+    expect { comment.search_doc }.to raise_error(Search::Errors::Transport::NotFound)
 
     sidekiq_perform_enqueued_jobs { described_class.new.run }
-    expect(article.elasticsearch_doc).not_to be_nil
-    expect(podcast_episode.elasticsearch_doc).not_to be_nil
-    expect(comment.elasticsearch_doc).not_to be_nil
+    expect(article.search_doc).not_to be_nil
+    expect(podcast_episode.search_doc).not_to be_nil
+    expect(comment.search_doc).not_to be_nil
   end
 end

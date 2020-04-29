@@ -49,21 +49,21 @@ RSpec.describe Users::Delete, type: :service do
 
   it "removes user from Elasticsearch" do
     sidekiq_perform_enqueued_jobs { user }
-    expect(user.elasticsearch_doc).not_to be_nil
+    expect(user.search_doc).not_to be_nil
     sidekiq_perform_enqueued_jobs do
       described_class.call(user)
     end
-    expect { user.elasticsearch_doc }.to raise_error(Search::Errors::Transport::NotFound)
+    expect { user.search_doc }.to raise_error(Search::Errors::Transport::NotFound)
   end
 
   it "removes articles from Elasticsearch" do
     article = create(:article, user: user)
     sidekiq_perform_enqueued_jobs
-    expect(article.elasticsearch_doc).not_to be_nil
+    expect(article.search_doc).not_to be_nil
     sidekiq_perform_enqueued_jobs do
       described_class.call(user)
     end
-    expect { article.elasticsearch_doc }.to raise_error(Search::Errors::Transport::NotFound)
+    expect { article.search_doc }.to raise_error(Search::Errors::Transport::NotFound)
   end
 
   it "removes reactions from Elasticsearch" do
@@ -71,13 +71,13 @@ RSpec.describe Users::Delete, type: :service do
     reaction = create(:reaction, category: "readinglist", reactable: article)
     user_reaction = create(:reaction, user_id: user.id, category: "readinglist")
     sidekiq_perform_enqueued_jobs
-    expect(reaction.elasticsearch_doc).not_to be_nil
-    expect(user_reaction.elasticsearch_doc).not_to be_nil
+    expect(reaction.search_doc).not_to be_nil
+    expect(user_reaction.search_doc).not_to be_nil
     sidekiq_perform_enqueued_jobs do
       described_class.call(user)
     end
-    expect { reaction.elasticsearch_doc }.to raise_error(Search::Errors::Transport::NotFound)
-    expect { user_reaction.elasticsearch_doc }.to raise_error(Search::Errors::Transport::NotFound)
+    expect { reaction.search_doc }.to raise_error(Search::Errors::Transport::NotFound)
+    expect { user_reaction.search_doc }.to raise_error(Search::Errors::Transport::NotFound)
   end
 
   # check that all the associated records are being destroyed, except for those that are kept explicitly (kept_associations)

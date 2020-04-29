@@ -14,8 +14,8 @@ class ChatChannelMembership < ApplicationRecord
   validates :role, inclusion: { in: %w[member mod] }
   validate  :permission
 
-  after_commit :index_to_elasticsearch, on: %i[create update]
-  after_commit :remove_from_elasticsearch, on: [:destroy]
+  after_commit :index, on: %i[create update]
+  after_commit :remove_from_index, on: [:destroy]
 
   delegate :channel_type, to: :chat_channel
 

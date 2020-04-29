@@ -32,9 +32,9 @@ class Tag < ActsAsTaggableOn::Tag
   before_save :mark_as_updated
 
   after_commit :bust_cache
-  after_commit :index_to_elasticsearch, on: %i[create update]
-  after_commit :sync_related_elasticsearch_docs, on: [:update]
-  after_commit :remove_from_elasticsearch, on: [:destroy]
+  after_commit :index, on: %i[create update]
+  after_commit :sync_related_search_docs, on: [:update]
+  after_commit :remove_from_index, on: [:destroy]
 
   scope :eager_load_serialized_data, -> {}
 

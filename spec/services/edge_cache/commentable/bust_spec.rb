@@ -16,8 +16,8 @@ RSpec.describe EdgeCache::Commentable::Bust, type: :service do
   end
 
   it "indexes commentable to Elasticsearch" do
-    allow(commentable).to receive(:index_to_elasticsearch_inline)
+    allow(commentable).to receive(:index_inline)
     described_class.call(commentable, cache_buster)
-    expect(commentable).to have_received(:index_to_elasticsearch_inline).once
+    expect(commentable).to have_received(:index_inline).once
   end
 end

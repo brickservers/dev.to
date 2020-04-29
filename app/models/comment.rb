@@ -40,8 +40,8 @@ class Comment < ApplicationRecord
   after_create_commit :send_email_notification, if: :should_send_email_notification?
   after_create_commit :create_first_reaction
   after_create_commit :send_to_moderator
-  after_commit :index_to_elasticsearch, on: %i[create update]
-  after_commit :remove_from_elasticsearch, on: [:destroy]
+  after_commit :index, on: %i[create update]
+  after_commit :remove_from_index, on: [:destroy]
   before_save    :set_markdown_character_count, if: :body_markdown
   before_create  :adjust_comment_parent_based_on_depth
   after_update   :remove_notifications, if: :deleted

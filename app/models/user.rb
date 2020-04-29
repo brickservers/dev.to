@@ -170,9 +170,9 @@ class User < ApplicationRecord
   before_destroy :unsubscribe_from_newsletters, prepend: true
 
   after_create_commit :send_welcome_notification, :estimate_default_language
-  after_commit :index_to_elasticsearch, on: %i[create update]
-  after_commit :sync_related_elasticsearch_docs, on: %i[create update]
-  after_commit :remove_from_elasticsearch, on: [:destroy]
+  after_commit :index, on: %i[create update]
+  after_commit :sync_related_search_docs, on: %i[create update]
+  after_commit :remove_from_index, on: [:destroy]
 
   def self.dev_account
     find_by(id: SiteConfig.staff_user_id)
@@ -606,6 +606,6 @@ class User < ApplicationRecord
   end
 
   def index_roles(_role)
-    index_to_elasticsearch_inline
+    index_inline
   end
 end

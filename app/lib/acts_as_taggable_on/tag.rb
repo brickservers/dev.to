@@ -1,7 +1,7 @@
 module ActsAsTaggableOn
   class Tag
     after_commit on: %i[create update] do
-      ::Tag.find(id).index_to_elasticsearch
+      ::Tag.find(id).index
     end
 
     after_commit on: :update do

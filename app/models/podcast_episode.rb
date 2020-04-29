@@ -31,8 +31,8 @@ class PodcastEpisode < ApplicationRecord
   after_destroy :purge, :purge_all
   after_save :bust_cache
 
-  after_commit :index_to_elasticsearch, on: %i[update]
-  after_commit :remove_from_elasticsearch, on: [:destroy]
+  after_commit :index, on: %i[update]
+  after_commit :remove_from_index, on: [:destroy]
 
   before_validation :process_html_and_prefix_all_images
 

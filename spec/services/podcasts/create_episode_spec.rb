@@ -21,7 +21,7 @@ RSpec.describe Podcasts::CreateEpisode, type: :service do
 
     it "indexes the episode" do
       sidekiq_perform_enqueued_jobs { described_class.call(podcast.id, item) }
-      expect { podcast.podcast_episodes.each(&:elasticsearch_doc) }.not_to raise_error
+      expect { podcast.podcast_episodes.each(&:search_doc) }.not_to raise_error
     end
 
     it "creates an episode with correct data" do

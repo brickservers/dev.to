@@ -157,7 +157,7 @@ RSpec.describe "Internal::Users", type: :request do
       expect(ghost.comments.count).to eq(1)
       expect(ghost.comments.last.path).to include("ghost")
       expect(articles.last.path).to include("ghost")
-      expect(articles.last.elasticsearch_doc.dig("_source", "path")).to include("ghost")
+      expect(articles.last.search_doc.dig("_source", "path")).to include("ghost")
     end
   end
 

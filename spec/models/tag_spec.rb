@@ -117,13 +117,13 @@ RSpec.describe Tag, type: :model do
       sidekiq_perform_enqueued_jobs
       expect(collect_keywords(article)).to include(new_keywords)
       expect(
-        reaction.elasticsearch_doc.dig("_source", "reactable", "tags").flat_map { |t| t["keywords_for_search"] },
+        reaction.search_doc.dig("_source", "reactable", "tags").flat_map { |t| t["keywords_for_search"] },
       ).to include(new_keywords)
       expect(collect_keywords(podcast_episode)).to include(new_keywords)
     end
   end
 
   def collect_keywords(record)
-    record.elasticsearch_doc.dig("_source", "tags").flat_map { |t| t["keywords_for_search"] }
+    record.search_doc.dig("_source", "tags").flat_map { |t| t["keywords_for_search"] }
   end
 end

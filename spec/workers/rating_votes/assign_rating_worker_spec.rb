@@ -41,7 +41,7 @@ RSpec.describe RatingVotes::AssignRatingWorker, type: :worker do
       create(:rating_vote, article_id: article.id, user_id: user.id, rating: 4.0)
       create(:rating_vote, article_id: article.id, user_id: second_user.id, rating: 1.0, context: "comment")
       worker.perform(article.id)
-      expect(article.elasticsearch_doc.dig("_source", "experience_level_rating")).to eq(2.5)
+      expect(article.search_doc.dig("_source", "experience_level_rating")).to eq(2.5)
     end
   end
 end

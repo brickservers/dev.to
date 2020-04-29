@@ -47,7 +47,7 @@ module Podcasts
 
     def finalize(episode)
       episode.purge_all
-      episode.index_to_elasticsearch
+      episode.index
     end
   end
 end

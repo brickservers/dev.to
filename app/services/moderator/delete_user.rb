@@ -46,7 +46,7 @@ module Moderator
       user.articles.preload(:organization, :tag_taggings, :tags).find_each do |article|
         path = "/#{@ghost.username}/#{article.slug}"
         article.update_columns(user_id: @ghost.id, path: path)
-        article.index_to_elasticsearch_inline
+        article.index_inline
       end
     end
   end

@@ -13,13 +13,13 @@ RSpec.describe DataSync::Elasticsearch::Article, type: :service do
       allow(article).to receive(:saved_changes).and_return(published: [true, false])
       reaction = create(:reaction, reactable: article, category: "readinglist")
       sidekiq_perform_enqueued_jobs
-      expect(reaction.elasticsearch_doc).not_to be_nil
+      expect(reaction.search_doc).not_to be_nil
 
       article.update_column(:published, false)
 
       described_class.new(article).call
       sidekiq_perform_enqueued_jobs
-      expect { reaction.elasticsearch_doc }.to raise_error(Search::Errors::Transport::NotFound)
+      expect { reaction.search_doc }.to raise_error(Search::Errors::Transport::NotFound)
     end
   end
 end

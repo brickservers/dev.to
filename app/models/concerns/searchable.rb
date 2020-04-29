@@ -3,15 +3,15 @@ module Searchable
     id
   end
 
-  def index_to_elasticsearch
+  def index
     Search::IndexWorker.perform_async(self.class.name, id)
   end
 
-  def index_to_elasticsearch_inline
+  def index_inline
     self.class::SEARCH_CLASS.index(search_id, serialized_search_hash)
   end
 
-  def remove_from_elasticsearch
+  def remove_from_index
     Search::RemoveFromIndexWorker.perform_async(self.class::SEARCH_CLASS.to_s, search_id)
   end
 
@@ -19,11 +19,11 @@ module Searchable
     self.class::SEARCH_SERIALIZER.new(self).serializable_hash.dig(:data, :attributes)
   end
 
-  def elasticsearch_doc
+  def search_doc
     self.class::SEARCH_CLASS.find_document(search_id)
   end
 
-  def sync_related_elasticsearch_docs
+  def sync_related_search_docs
     self.class::DATA_SYNC_CLASS.new(self).call
   end
 end

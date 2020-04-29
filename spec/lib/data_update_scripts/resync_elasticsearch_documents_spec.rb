@@ -1,5 +1,5 @@
 require "rails_helper"
-require Rails.root.join("lib/data_update_scripts/20200410152018_resync_elasticsearch_documents.rb")
+require Rails.root.join("lib/data_update_scripts/20200410152018_resync_search_documents.rb")
 
 describe DataUpdateScripts::ResyncElasticsearchDocuments, elasticsearch: true do
   it "indexes podcast episodes and tags to Elasticsearch" do
@@ -7,12 +7,12 @@ describe DataUpdateScripts::ResyncElasticsearchDocuments, elasticsearch: true do
     podcast_episode = create(:podcast_episode)
     Sidekiq::Worker.clear_all
 
-    expect { tag.elasticsearch_doc }.to raise_error(Search::Errors::Transport::NotFound)
-    expect { podcast_episode.elasticsearch_doc }.to raise_error(Search::Errors::Transport::NotFound)
+    expect { tag.search_doc }.to raise_error(Search::Errors::Transport::NotFound)
+    expect { podcast_episode.search_doc }.to raise_error(Search::Errors::Transport::NotFound)
 
     sidekiq_perform_enqueued_jobs { described_class.new.run }
-    expect(tag.elasticsearch_doc).not_to be_nil
-    expect(podcast_episode.elasticsearch_doc).not_to be_nil
+    expect(tag.search_doc).not_to be_nil
+    expect(podcast_episode.search_doc).not_to be_nil
   end
 
   it "syncs articles, comments, and users to Elasticsearch", :aggregate_failures do
@@ -28,9 +28,9 @@ describe DataUpdateScripts::ResyncElasticsearchDocuments, elasticsearch: true do
     sidekiq_perform_enqueued_jobs { described_class.new.run }
     refresh_indexes
 
-    expect(article.elasticsearch_doc).not_to be_nil
-    expect(user.elasticsearch_doc).not_to be_nil
-    expect(comment.elasticsearch_doc).not_to be_nil
+    expect(article.search_doc).not_to be_nil
+    expect(user.search_doc).not_to be_nil
+    expect(comment.search_doc).not_to be_nil
     expect(Article::SEARCH_CLASS.articles_document_count).to eq(Article.count)
     expect(Comment::SEARCH_CLASS.comments_document_count).to eq(Comment.count)
     expect(User::SEARCH_CLASS.document_count).to eq(User.count)

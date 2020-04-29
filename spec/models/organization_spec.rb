@@ -60,16 +60,16 @@ RSpec.describe Organization, type: :model do
       new_org_name = "#{organization.name}+NEW"
       organization.update(name: new_org_name)
       sidekiq_perform_enqueued_jobs
-      expect(article.elasticsearch_doc.dig("_source", "organization", "name")).to eq(new_org_name)
+      expect(article.search_doc.dig("_source", "organization", "name")).to eq(new_org_name)
     end
 
     it "on destroy removes data from elasticsearch" do
       article = create(:article, organization: organization)
       sidekiq_perform_enqueued_jobs
-      expect(article.elasticsearch_doc.dig("_source", "organization", "id")).to eq(organization.id)
+      expect(article.search_doc.dig("_source", "organization", "id")).to eq(organization.id)
       organization.destroy
       sidekiq_perform_enqueued_jobs
-      expect(article.elasticsearch_doc.dig("_source", "organization")).to be_nil
+      expect(article.search_doc.dig("_source", "organization")).to be_nil
     end
   end
 

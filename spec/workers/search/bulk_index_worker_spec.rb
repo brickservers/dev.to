@@ -11,12 +11,12 @@ RSpec.describe Search::BulkIndexWorker, type: :worker, elasticsearch: true do
     Sidekiq::Worker.clear_all
 
     reactions.each do |reaction|
-      expect { reaction.elasticsearch_doc }.to raise_error(Search::Errors::Transport::NotFound)
+      expect { reaction.search_doc }.to raise_error(Search::Errors::Transport::NotFound)
     end
     worker.perform("Reaction", reactions.map(&:id))
 
     reactions.each do |reaction|
-      expect(reaction.elasticsearch_doc.dig("_source", "id")).to eql(reaction.id)
+      expect(reaction.search_doc.dig("_source", "id")).to eql(reaction.id)
     end
   end
 end

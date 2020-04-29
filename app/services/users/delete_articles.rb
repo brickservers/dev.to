@@ -13,10 +13,10 @@ module Users
           comment.reactions.delete_all
           cache_buster.bust_comment(comment.commentable)
           cache_buster.bust_user(comment.user)
-          comment.remove_from_elasticsearch
+          comment.remove_from_index
           comment.delete
         end
-        article.remove_from_elasticsearch
+        article.remove_from_index
         article.delete
         article.purge
       end

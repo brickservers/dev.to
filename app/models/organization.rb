@@ -56,7 +56,7 @@ class Organization < ApplicationRecord
   before_validation :downcase_slug
   before_validation :evaluate_markdown
 
-  after_commit :sync_related_elasticsearch_docs, on: %i[update destroy]
+  after_commit :sync_related_search_docs, on: %i[update destroy]
 
   mount_uploader :profile_image, ProfileImageUploader
   mount_uploader :nav_image, ProfileImageUploader
@@ -150,7 +150,7 @@ class Organization < ApplicationRecord
     errors.add(:slug, "is taken.") if slug_taken
   end
 
-  def sync_related_elasticsearch_docs
+  def sync_related_search_docs
     DataSync::Elasticsearch::Organization.new(self).call
   end
 end

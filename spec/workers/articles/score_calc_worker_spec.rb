@@ -32,9 +32,9 @@ RSpec.describe Articles::ScoreCalcWorker, type: :worker do
 
       it "indexes the article to Elasticsearch" do
         allow(Article).to receive(:find_by).and_return(article)
-        allow(article).to receive(:index_to_elasticsearch_inline)
+        allow(article).to receive(:index_inline)
         worker.perform(article.id)
-        expect(article).to have_received(:index_to_elasticsearch_inline).once
+        expect(article).to have_received(:index_inline).once
       end
     end
 

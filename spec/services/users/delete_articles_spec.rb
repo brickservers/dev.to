@@ -16,10 +16,10 @@ RSpec.describe Users::DeleteArticles, type: :service do
 
   it "removes article from Elasticsearch" do
     sidekiq_perform_enqueued_jobs
-    expect(article.elasticsearch_doc).not_to be_nil
+    expect(article.search_doc).not_to be_nil
 
     sidekiq_perform_enqueued_jobs { described_class.call(user) }
-    expect { article.elasticsearch_doc }.to raise_error(Search::Errors::Transport::NotFound)
+    expect { article.search_doc }.to raise_error(Search::Errors::Transport::NotFound)
   end
 
   context "with comments" do
@@ -56,13 +56,13 @@ RSpec.describe Users::DeleteArticles, type: :service do
     it "removes comments from Elasticsearch", :aggregate_failures do
       sidekiq_perform_enqueued_jobs
       comments = article.comments
-      comments.each { |comment| expect(comment.elasticsearch_doc).not_to be_nil }
+      comments.each { |comment| expect(comment.search_doc).not_to be_nil }
       sidekiq_perform_enqueued_jobs(only: Search::RemoveFromIndexWorker) do
         described_class.call(user)
       end
 
       comments.each do |comment|
-        expect { comment.elasticsearch_doc }.to raise_error(Search::Errors::Transport::NotFound)
+        expect { comment.search_doc }.to raise_error(Search::Errors::Transport::NotFound)
       end
     end
   end

@@ -7,7 +7,7 @@ RSpec.describe ActsAsTaggableOn::Tag, type: :lib do
       create(:article, body_markdown: "---\ntitle: Me#{rand(1000)}\ntags: #{tag_name}\n---\n\nMeMeMe")
       sidekiq_perform_enqueued_jobs
       tag = Tag.find_by(name: tag_name)
-      expect(tag.elasticsearch_doc).not_to be_nil
+      expect(tag.search_doc).not_to be_nil
     end
 
     it "syncs related elasticsearch documents" do
@@ -23,13 +23,13 @@ RSpec.describe ActsAsTaggableOn::Tag, type: :lib do
       sidekiq_perform_enqueued_jobs
       expect(collect_keywords(article)).to include(new_keywords)
       expect(
-        reaction.elasticsearch_doc.dig("_source", "reactable", "tags").flat_map { |t| t["keywords_for_search"] },
+        reaction.search_doc.dig("_source", "reactable", "tags").flat_map { |t| t["keywords_for_search"] },
       ).to include(new_keywords)
       expect(collect_keywords(podcast_episode)).to include(new_keywords)
     end
   end
 
   def collect_keywords(record)
-    record.elasticsearch_doc.dig("_source", "tags").flat_map { |t| t["keywords_for_search"] }
+    record.search_doc.dig("_source", "tags").flat_map { |t| t["keywords_for_search"] }
   end
 end

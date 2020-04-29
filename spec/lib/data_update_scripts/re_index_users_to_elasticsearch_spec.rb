@@ -4,8 +4,8 @@ require Rails.root.join("lib/data_update_scripts/20200406213152_re_index_users_t
 describe DataUpdateScripts::ReIndexUsersToElasticsearch, elasticsearch: true do
   it "indexes users to Elasticsearch" do
     user = create(:user)
-    expect { user.elasticsearch_doc }.to raise_error(Search::Errors::Transport::NotFound)
+    expect { user.search_doc }.to raise_error(Search::Errors::Transport::NotFound)
     sidekiq_perform_enqueued_jobs { described_class.new.run }
-    expect(user.elasticsearch_doc).not_to be_nil
+    expect(user.search_doc).not_to be_nil
   end
 end

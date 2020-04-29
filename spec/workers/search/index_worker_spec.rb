@@ -11,10 +11,10 @@ RSpec.describe Search::IndexWorker, type: :worker, elasticsearch: true do
 
   it "indexes document" do
     tag = FactoryBot.create(:tag)
-    expect { tag.elasticsearch_doc }.to raise_error(Search::Errors::Transport::NotFound)
+    expect { tag.search_doc }.to raise_error(Search::Errors::Transport::NotFound)
     worker.perform(tag.class.name, tag.id)
 
-    expect(tag.elasticsearch_doc.dig("_source", "id")).to eql(tag.id)
+    expect(tag.search_doc.dig("_source", "id")).to eql(tag.id)
   end
 
   it "does not raise an error if Reaction record is not found" do
